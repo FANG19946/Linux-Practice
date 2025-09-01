@@ -12,12 +12,14 @@
 char recvdString[9];  // the buffer for the child to store the received string into
 bool canSend = false; // synchronization mechanism for notifying the parent that the child is ready to receive
 int currIndex = 0;
+bool ackRecived = false;
 
 void sigHandle1(int sig)
 {
     // TODO : Implement this function for when child receives a 1
     // SIGUSR2 Handler
     recvdString[currIndex++] = '1';
+    kill(getppid(), SIGUSR2);
 }
 
 void sigHandle0(int sig)
@@ -25,6 +27,7 @@ void sigHandle0(int sig)
     // TODO : Implement this function for when child receives a 0
     // SIGUSR1 Handler
     recvdString[currIndex++] = '0';
+    kill(getppid(), SIGUSR2);
 }
 
 void synchronizeParent(int sig)
@@ -32,6 +35,11 @@ void synchronizeParent(int sig)
     canSend = true;
 }
 
+// Acknowledgement Handler
+void acknowledgeBit(int sig)
+{
+    ackRecived = true;
+}
 int main()
 {
 
@@ -54,7 +62,7 @@ int main()
         {
             pause(); // wait for next signal
         }
-         // Null terminates the string so that it prints in an expected manner
+        // Null terminates the string so that it prints in an expected manner
         printf("[Child] Received bitstring is\t%s\n", recvdString); // Do not edit, prints the received bitstring
 
         exit(0);
@@ -87,6 +95,7 @@ int main()
         }
 
         printf("[Parent] Input bitstring is \t%s\n", tmp);
+        signal(SIGUSR2, acknowledgeBit); // parent installs ACK handler
 
         while (!canSend)
         {
@@ -94,6 +103,7 @@ int main()
         } // Wait until the child is ready to receive
         for (int i = 0; i < LENGTH; i++)
         {
+            ackRecived = false;
             if (tmp[i] == '1')
             {
                 // TODO : Add mechanism to send 1 to child
@@ -104,7 +114,7 @@ int main()
                 // TODO : Add mechanism to send 0 to child
                 kill(cpid, SIGUSR1);
             }
-            sleep(1); // This is necessary to ensure the signals 1]all get sent to child and 2] are sent in correct ordering, increase time to increase reliability
+            while(!ackRecived); // This is necessary to ensure the signals 1]all get sent to child and 2] are sent in correct ordering, increase time to increase reliability
         }
         wait(NULL); // reap the child
     }
