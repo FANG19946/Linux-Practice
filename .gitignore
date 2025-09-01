@@ -1,0 +1,19 @@
+# Ignore all .tgz files
+*.tgz
+
+# PDF
+.pdf
+
+# Ignore all files with no dot in the name (extensionless) in root and subfolders
+# This works in Git for all extensionless files
+# Match any file in any folder that does NOT contain a dot
+# The trick: ignore everything first, then whitelist files with a dot
+*
+
+# Unignore directories so we can traverse them
+!*/
+
+# Unignore all files with an extension (files containing a dot)
+!**/*.*
+
+

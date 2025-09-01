@@ -1,0 +1,25 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:549: checking for gcc
+configure:626: checking whether the C compiler (gcc  ) works
+configure:640: gcc -o conftest    conftest.c  1>&5
+configure:637:1: warning: return type defaults to 'int' [-Wimplicit-int]
+  637 | main(){return(0);}
+      | ^~~~
+configure:660: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:665: checking whether we are using GNU C
+configure:689: checking whether gcc accepts -g
+configure:718: checking for gcc option to accept ANSI C
+configure:772: checking how to run the C preprocessor
+configure:836: checking for function prototypes
+configure:991: checking for working const
+configure:1095: checking for a BSD compatible install
+configure:1147: checking for tparm in -lncurses
+configure:1185: checking for tgetent in -ltermcap
+configure:1229: checking for readline in -lreadline
+configure:1304: checking for string.h
+configure:1338: checking for stdlib.h
+configure:1372: checking for strchr
+configure:1421: checking for strspn
+configure:1470: checking for strtok
